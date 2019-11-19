@@ -6,6 +6,7 @@ from flask import Flask
 
 from app.extensions import bootstrap, db, migrate
 from app.functions import get_module_functions, is_login, url_for, get_endpoint
+from app import user, index
 
 
 def create_app(object_name):
@@ -17,7 +18,8 @@ def create_app(object_name):
     bootstrap.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
-
+    user.init_app(app)
+    index.init_app(app)
 
     app.add_template_global(is_login)
     app.add_template_global(url_for)
