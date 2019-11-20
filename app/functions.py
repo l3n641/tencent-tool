@@ -59,9 +59,6 @@ def login_required(admin=True):
                 session.clear()
                 return redirect(url_for("auth.login"))
 
-            if admin and not user.admin:
-                return redirect(url_for("index.index"))
-
             g.user = user
 
             result = f(*args, **kwargs)
