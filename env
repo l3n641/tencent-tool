@@ -1,0 +1,7 @@
+FLASK_APP = manage:app
+FLASK_ENV = production
+SECRET_KEY = 0703a2c0e88eddf688a45d14b88d2b39
+REDIS = redis://localhost:6379/0
+BROKER = redis://localhost:6379/1
+BACKEND = redis://localhost:6379/2
+DATABASE = mysql+pymysql://账号:密码@localhost:3306/数据库名称?charset=utf8mb4
