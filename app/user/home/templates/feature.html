@@ -1,0 +1,185 @@
+{% extends "user/base.html" %}
+
+{% from "bootstrap/wtf.html" import form_field %}
+{% from "bootstrap/wtf.html" import quick_form %}
+
+
+{% block styles %}
+{{ super() }}
+<style>
+    .image-show img {
+        width: 120px;
+        height: 120px;
+    }
+</style>
+{% endblock %}
+
+{% block container %}
+
+
+<div class="">
+    <form class=" form-inline " id="form">
+        <div class="form-group  form-margin-bottom  ">
+            <label class="" for="event_code">事件code</label>
+            <input type="text" class="form-control" id="event_code" name="event_code" placeholder="事件code">
+        </div>
+
+
+        <div class="form-group  form-margin-bottom  ">
+            <label class="" for="event_description">事件说明</label>
+            <input type="text" class="form-control" id="event_description" name="event_description" placeholder="事件说明">
+        </div>
+
+
+        <div class="form-group  form-margin-bottom  ">
+            <label class="sr-only" for="argument_key">参数key</label>
+            <input type="text" class="form-control sr-only " id="argument_key" name="argument_key" placeholder="参数key">
+        </div>
+
+
+        <div class="form-group  form-margin-bottom  ">
+            <label class="sr-only" for="argument_description">参数说明</label>
+            <input type="text" class="form-control sr-only " id="argument_description" name="argument_description"
+                   placeholder="参数说明">
+        </div>
+
+
+        <div class="form-group  form-margin-bottom  sr-only " id="type_div">
+
+            <label class="" for="type">类型</label>
+            <select class="form-control" name="type" id="type" name="type">
+                <option>string</option>
+            </select>
+        </div>
+
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" checked="checked" name="default_field" id="default_field" value="1"> 默认字段
+            </label>
+        </div>
+        <div class="row">
+            <div class="form-group  form-margin-bottom  ">
+                <label class="" for="category">分类</label>
+                <input type="text" class="form-control" id="category" name="category" placeholder="分类">
+            </div>
+
+            <div class="form-group  form-margin-bottom  ">
+                <label class="" for="category">负责人</label>
+                <input type="text" class="form-control" id="principal" name="principal" placeholder="负责人"></div>
+
+
+            <div class="form-group  form-margin-bottom  ">
+                <label class="" for="remark">备注</label>
+                <input type="text" class="form-control" id="remark" name="remark" placeholder="备注"></div>
+
+        </div>
+        <div class="row col-md-offset-8">
+            <button type="reset" class="btn btn-warning">清空文本</button>
+            <button type="button" class="btn btn-default" id="add_content">添加</button>
+
+        </div>
+    </form>
+</div>
+
+<div>
+    <table class="table table-hover table-bordered" id="datas">
+        <caption>悬停表格布局</caption>
+        <thead>
+        <tr>
+            <th>事件code</th>
+            <th>事件说明</th>
+            <th>参数key</th>
+            <th>参数说明</th>
+            <th>类型</th>
+            <th>分类</th>
+            <th>负责人</th>
+            <th>备注</th>
+            <th>预置参数</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+    <div class="row ">
+        <button type="button" class="btn btn-warning" id="clear_content">清空内容</button>
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+
+<script>
+
+
+    //显示和隐藏input
+    $("#default_field").change(function () {
+        if ($('#default_field').is(':checked')) {
+            $("#argument_key").addClass("sr-only");
+            $("#argument_description").addClass("sr-only");
+            $("#type_div").addClass("sr-only");
+        } else {
+            $("#argument_key").removeClass("sr-only");
+            $("#argument_description").removeClass("sr-only");
+            $("#type_div").removeClass("sr-only");
+        }
+    });
+
+
+    $(document).ready(function () {
+
+        var my_table = $('#datas').DataTable({
+
+            "autoWidth": false,//当重复刷新表格时，我的页面会出现变形的，现象，加了这个就好了
+
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5'
+            ],
+            language: {
+                buttons: {
+                    copyTitle: '复制信息',
+                    copyKeys: "",
+                    copySuccess: {
+                        _: '复制%d 行数据 ',
+                        1: '1 ligne copiée'
+                    }
+                }
+            }
+        });
+
+        $("#clear_content ").on('click', function () {
+            my_table.clear()
+            my_table.draw();
+        });
+
+        $("#add_content").click(function () {
+
+            $.ajax({
+                type: 'POST',
+                url: "{{url_for('home.data')}}",
+                data: $("form").serialize(),
+                dataType: "json",
+                success: function (datas) {
+
+                    $.each(datas, function (index, data) {
+                        my_table.row.add(data).draw();
+                    });
+
+
+                    console.log(datas)
+                }
+            })
+        });
+
+
+    });
+
+
+</script>
+{% endblock %}
