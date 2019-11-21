@@ -33,7 +33,7 @@ def data():
         data_resource.append(row)
 
     else:
-        datas = config_srv.get_all()
+        datas = config_srv.get_all({"user_id": g.user.id})
         for data in datas:
             row = [
                 request.form.get('event_code'),
