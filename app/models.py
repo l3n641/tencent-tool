@@ -13,7 +13,6 @@ class Base(db.Model):
     delete_time = db.Column(db.DateTime, nullable=True)
 
 
-
 class User(Base):
     """用户表"""
 
@@ -34,3 +33,11 @@ class User(Base):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+class Config(Base):
+    argument_key = db.Column(db.String(255), unique=False, nullable=False)
+    argument_description = db.Column(db.String(255), unique=False, nullable=False)
+    type = db.Column(db.String(255), unique=False, nullable=False)
+    pre_argument = db.Column(db.String(255), unique=False, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
