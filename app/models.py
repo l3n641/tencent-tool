@@ -18,10 +18,7 @@ class User(Base):
 
     phone = db.Column(db.String(255), unique=True, nullable=True, index=True)  # 手机号
     password_hash = db.Column(db.String(255), nullable=False)  # 密码
-
-    @property
-    def username(self):
-        return self.phone
+    user_name=db.Column(db.String(255), unique=True, nullable=True, index=True)  # 用户名
 
     @property
     def password(self):
