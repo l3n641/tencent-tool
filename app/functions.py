@@ -9,7 +9,7 @@ from decimal import Decimal
 from functools import wraps
 from inspect import getmembers, isfunction
 
-from flask import  g, redirect, request, session, url_for as origin_url_for
+from flask import g, redirect, request, session, url_for as origin_url_for
 
 from app.extensions import db
 
@@ -71,14 +71,10 @@ def login_required(admin=True):
     return _login_required
 
 
-
-
 def is_login():
     """判断是否登陆"""
 
     return "user" in g
-
-
 
 
 def txid_format(txid):
@@ -146,3 +142,56 @@ def generate_csv(datas, head, fields):
             row.append(str(data[field]))
 
         yield ','.join(row) + '\n'
+
+
+def generate_default_config(user_id):
+    from app.services import config_srv
+    from app.extensions import db
+    default_connfigs = [
+        {"argument_key": "A76", "argument_description": "meeting_code", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "A67", "argument_description": "process_name", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "A49", "argument_description": "分支", "type": "string", "pre_argument": "", "user_id": user_id},
+        {"argument_key": "A3", "argument_description": "device_id", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "A23", "argument_description": "发布渠道", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "A106", "argument_description": "设备显示名", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "A1", "argument_description": "app_uid", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "A8", "argument_description": "vip_level", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "A9", "argument_description": "product_name", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "os_ver", "argument_description": "操作系统版本号", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "unique_report_id", "argument_description": "log_id", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "wemeet_platform", "argument_description": "平台类型", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "A95", "argument_description": "app_id", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "background", "argument_description": "后台状态", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "role_type", "argument_description": "角色身份", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "meeting_type", "argument_description": "会议类型", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "av_room_id", "argument_description": "媒体房间号", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "account_type", "argument_description": "账户类型", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "corp_id", "argument_description": "公司id", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+        {"argument_key": "app_main_version", "argument_description": "app版本号", "type": "string", "pre_argument": "",
+         "user_id": user_id},
+
+    ]
+
+    for config in default_connfigs:
+        config_srv.save(**config)
+        db.session.commit()
+
+

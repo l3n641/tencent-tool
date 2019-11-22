@@ -33,6 +33,7 @@ def create_user():
     :return:
     """
     from app.services import user_srv
+    from app.functions import generate_default_config
 
     print('开始创建账号')
     phone = input("输入用户的手机号:")
@@ -45,4 +46,7 @@ def create_user():
 
     password = input("请输入登陆密码:")
 
-    user_srv.save(**{"phone": phone, "password": password})
+    user_id = user_srv.save(**{"phone": phone, "password": password})
+    if user_id:
+        generate_default_config(user_id)
+        print("注册用户成功")
