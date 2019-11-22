@@ -72,7 +72,7 @@ def login_required(admin=True):
 
 
 def is_login():
-    """判断是否登陆"""
+    """判断是否登录"""
 
     return "user" in g
 

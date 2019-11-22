@@ -11,7 +11,7 @@ bp = Blueprint("auth", __name__, url_prefix="/auth", template_folder="templates"
 
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
-    """登陆"""
+    """登录"""
 
     if "user_id" in session:
         return redirect(request.args.get("next") or url_for("home.features"))
@@ -22,7 +22,7 @@ def login():
         if user and user.verify_password(form.password.data):
             session["user_id"] = user.id
             return redirect(url_for(request.args.get("next") or "home.features"))
-        flash("登陆失败")
+        flash("登录失败")
 
 
     return render_template("login.html", form=form)
