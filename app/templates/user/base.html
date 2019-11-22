@@ -35,11 +35,11 @@
 
                 <li
                 {% if request.endpoint =='home.features' %} class="active"{% endif %}>
-                <a href="{{ url_for('home.features') }}">功能页</a>
+                <a href="{{ url_for('home.features') }}"  target="_blank" >功能页</a>
                 </li>
                 <li
                 {% if request.endpoint =='home.config' %} class="active"{% endif %}>
-                <a href="{{ url_for('home.config') }}">配置页</a>
+                <a href="{{ url_for('home.config') }}"  target="_blank" >配置页</a>
                 </li>
             </ul>
 
