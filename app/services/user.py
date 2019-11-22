@@ -10,7 +10,7 @@ class UserService(CommonService):
         """根据账号获取用户信息"""
 
         return self._model.query.filter(
-            self._model.phone == account,
+            self._model.user_name == account,
         ).first()
 
     def save(self, **kwargs):
