@@ -1,7 +1,10 @@
-from flask import Blueprint, render_template, g, flash, redirect, url_for, request
+from flask import Blueprint, render_template, g, flash, redirect, url_for, request, current_app
 from app.functions import login_required
 from app.services import config_srv
-import json
+import json, os
+from app.constants import EXCEL_EXTENSIONS
+from app.functions import allowed_file
+import pandas
 
 bp = Blueprint("home", __name__, url_prefix="/home", template_folder="templates")
 from .forms import ConfigForm
@@ -33,20 +36,7 @@ def data():
         data_resource.append(row)
 
     else:
-        datas = config_srv.get_all({"user_id": g.user.id})
-        for data in datas:
-            row = [
-                request.form.get('event_code'),
-                request.form.get('event_description'),
-                data.argument_key,
-                data.argument_description,
-                data.type,
-                request.form.get("category"),
-                request.form.get("principal"),
-                request.form.get("remark"),
-                data.pre_argument
-            ]
-            data_resource.append(row)
+        data_resource = get_datas(**request.form)
 
     return json.dumps(data_resource)
 
@@ -77,3 +67,55 @@ def delete(_id):
         flash("删除失败")
 
     return redirect(url_for(".config"))
+
+
+@bp.route("/upload", methods=['POST'])
+@login_required()
+def upload():
+    """文件上传"""
+
+    file = request.files.get("Filedata")
+
+    upload_path = os.path.join(current_app.static_folder, 'upload')
+
+    if not os.path.exists(upload_path):
+        os.makedirs(upload_path)
+
+    # 如果上传的是文档格式 后缀
+    if file and allowed_file(file.filename, EXCEL_EXTENSIONS):
+
+        file_name = file.filename
+        file_path = os.path.join(upload_path, file_name)
+        file.save(file_path)
+        frame = pandas.read_excel(file_path)
+        data_resource = []
+        for index, row in frame.iterrows():
+            sub_datas = get_datas(row[0], row[1], **request.form)
+            data_resource.extend(sub_datas)
+
+        os.remove(file_path)
+        return json.dumps(data_resource)
+
+    return json.dumps({
+    })
+
+
+def get_datas(event_code, event_description, **kwargs):
+    data_resource = []
+
+    datas = config_srv.get_all({"user_id": g.user.id})
+    for data in datas:
+        row = [
+            event_code,
+            event_description,
+            data.argument_key,
+            data.argument_description,
+            data.type,
+            kwargs.get("category", ""),
+            kwargs.get("principal"),
+            kwargs.get("remark"),
+            data.pre_argument
+        ]
+        data_resource.append(row)
+
+    return data_resource

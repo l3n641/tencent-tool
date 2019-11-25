@@ -30,6 +30,10 @@
             <input type="text" class="form-control" id="event_description" name="event_description" placeholder="事件说明">
         </div>
 
+        <div class="form-group  form-margin-bottom  ">
+            <input type="file" class="form-control" id="upload" name="document">
+        </div>
+
 
         <div class="form-group  form-margin-bottom  ">
             <label class="sr-only" for="argument_key">参数key</label>
@@ -172,9 +176,49 @@
                     });
 
 
-                    console.log(datas)
                 }
             })
+        });
+
+        $('input[type=file]').uploadifive({
+            'auto': true,
+            'dnd': false,
+            'uploadScript': '{{ url_for("home.upload") }}',
+            'formData': {},
+            "fileType": '.xlsx,',
+            "multi": false,
+            "height": 40,
+            "width": 100,
+            "fileSizeLimit": "200MB",
+            "buttonText": "选择附件",
+            'removeCompleted': true,
+            onUploadComplete: function (file, data) {
+                datas = JSON.parse(data);
+                $.each(datas, function (index, data) {
+                    my_table.row.add(data).draw();
+                });
+
+
+            },
+
+            onUpload: function (file) {
+                //动态传值
+                var element = {
+                    "argument_key": $("input[name='mobile']").val(),
+                    "argument_description": $("input[name='argument_description']").val(),
+                    "category": $("input[name='category']").val(),
+                    "principal": $("input[name='principal']").val(),
+                    "remark": $("input[name='remark']").val(),
+                }
+
+                $('input[type=file]').data('uploadifive').settings.formData = element;   //动态
+            },
+
+
+            onFallback: function () {
+                alert("该浏览器无法使用!");
+            }
+
         });
 
 
@@ -182,4 +226,6 @@
 
 
 </script>
+
+
 {% endblock %}

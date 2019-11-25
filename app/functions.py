@@ -195,3 +195,12 @@ def generate_default_config(user_id):
         db.session.commit()
 
 
+def allowed_file(filename, extensions):
+    """
+    判断文件后缀是否运行
+    :param filename:
+    :param extensions:
+    :return:
+    """
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in extensions
