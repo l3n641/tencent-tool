@@ -90,7 +90,7 @@ def upload():
         frame = pandas.read_excel(file_path)
         data_resource = []
         for index, row in frame.iterrows():
-            sub_datas = get_datas(row[0], row[1], **request.form)
+            sub_datas = get_datas(row[0], row[1], row[2], row[3], row[4])
             data_resource.extend(sub_datas)
 
         os.remove(file_path)
@@ -100,7 +100,7 @@ def upload():
     })
 
 
-def get_datas(event_code, event_description, **kwargs):
+def get_datas(event_code, event_description, category, principal, remark):
     data_resource = []
 
     datas = config_srv.get_all({"user_id": g.user.id})
@@ -111,9 +111,9 @@ def get_datas(event_code, event_description, **kwargs):
             data.argument_key,
             data.argument_description,
             data.type,
-            kwargs.get("category", ""),
-            kwargs.get("principal"),
-            kwargs.get("remark"),
+            category,
+            principal,
+            remark,
             data.pre_argument
         ]
         data_resource.append(row)
