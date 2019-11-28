@@ -89,6 +89,7 @@ def upload():
         file.save(file_path)
         frame = pandas.read_excel(file_path)
         data_resource = []
+        frame=frame.fillna("")
         for index, row in frame.iterrows():
             event_code = row.get("事件code")
             event_description = row.get("事件说明")
