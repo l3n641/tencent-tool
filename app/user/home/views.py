@@ -90,7 +90,13 @@ def upload():
         frame = pandas.read_excel(file_path)
         data_resource = []
         for index, row in frame.iterrows():
-            sub_datas = get_datas(row[0], row[1], row[2], row[3], row[4])
+            event_code = row.get(0)
+            event_description = row.get(1)
+            category = row.get(2)
+            principal = row.get(3)
+            remark = row.get(4)
+            sub_datas = get_datas(event_code=event_code, event_description=event_description, category=category,
+                                  principal=principal, remark=remark)
             data_resource.extend(sub_datas)
 
         os.remove(file_path)
