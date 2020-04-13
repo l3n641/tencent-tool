@@ -10,5 +10,5 @@ class ConfigForm(FlaskForm):
     argument_description = StringField("参数说明", validators=[DataRequired("msg_filed_required")])
     type = StringField("类型", validators=[DataRequired("msg_filed_required")])
     pre_argument = StringField("预置参数")
-    config_type_id = HiddenField("配置类型", validators=[DataRequired("必须")], default=11)
+    config_type_id = HiddenField("配置类型", default=0)
     submit = SubmitField("提交")
