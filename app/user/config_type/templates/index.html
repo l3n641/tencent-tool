@@ -1,0 +1,55 @@
+{% extends "user/base.html" %}
+
+{% from "bootstrap/pagination.html" import render_pagination %}
+
+{% block container %}
+<div class="tools pull-right">
+    <a href="{{ url_for('.edit') }}" class="btn btn-primary">添加</a>
+</div>
+<table class="table table-hover">
+    <tr>
+        <th>名称</th>
+        <th>操作</th>
+    </tr>
+    <td>
+        默认配置页
+
+    </td>
+    <td>
+        <a href="{{ url_for('home.config') }}">编辑配置页项目</a>
+    </td>
+    {% for data in datas.items %}
+    <tr>
+        <td>{{ data.name }}</td>
+        <td>
+            <a href="{{ url_for('.edit', _id=data.id) }}">编辑配置页名称</a> |
+            <a href="{{ url_for('home.config',config_type=data.id) }}">编辑配置页项目</a> |
+            <a href="{{ url_for('.delete', _id=data.id) }}" class="delete-confirm">删除</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<div class="pull-right">
+    {{ render_pagination(datas) }}
+</div>
+</table>
+<div class="pull-right">
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+{{ super() }}
+<script>
+    $(".delete-confirm").confirm({
+        text: "{{ '如果删除,会连同配置一起删除' }}",
+        confirmButton: "{{ 'confirm' }}",
+        cancelButton: "{{ 'cancel' }}",
+        confirm: function (button) {
+            location.href = button.attr("href");
+        }
+    });
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "user/base.html" %}
+
+{% from "bootstrap/wtf.html" import form_field %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .image-show img {
+        width: 120px;
+        height: 120px;
+    }
+</style>
+{% endblock %}
+
+{% block container %}
+<div class="page-header">
+    <h1>配置页管理</h1>
+</div>
+<div class="col-md-4">
+    <form method="post">
+        {{form.csrf_token}}
+        {{form_field(form.name)}}
+        {{form_field(form.submit)}}
+    </form>
+</div>
+{% endblock %}
