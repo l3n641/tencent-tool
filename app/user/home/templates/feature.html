@@ -61,6 +61,16 @@
                 <input type="checkbox" checked="checked" name="default_field" id="default_field" value="1"> 默认字段
             </label>
         </div>
+
+        <div class="form-group  form-margin-bottom  ">
+            <select name="config_type_id" id="config_type_id">
+                <option value="0">默认配置页</option>
+                {% for config_type in config_types %}
+                <option value="{{config_type.id}}">{{config_type.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+
         <div class="row">
             <div class="form-group  form-margin-bottom  ">
                 <label class="" for="category">分类</label>
@@ -127,10 +137,12 @@
             $("#argument_key").addClass("sr-only");
             $("#argument_description").addClass("sr-only");
             $("#type_div").addClass("sr-only");
+            $("#config_type_id").removeClass("sr-only");
         } else {
             $("#argument_key").removeClass("sr-only");
             $("#argument_description").removeClass("sr-only");
             $("#type_div").removeClass("sr-only");
+            $("#config_type_id").addClass("sr-only");
         }
     });
 
@@ -209,6 +221,7 @@
                     "category": $("input[name='category']").val(),
                     "principal": $("input[name='principal']").val(),
                     "remark": $("input[name='remark']").val(),
+                    "config_type_id": $("#config_type_id").val(),
                 }
 
                 $('input[type=file]').data('uploadifive').settings.formData = element;   //动态

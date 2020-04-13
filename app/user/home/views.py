@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, g, flash, redirect, url_for, request, current_app
 from app.functions import login_required
-from app.services import config_srv
+from app.services import config_srv, config_type_srv
 import json, os
 from app.constants import EXCEL_EXTENSIONS
 from app.functions import allowed_file
@@ -13,7 +13,11 @@ from .forms import ConfigForm
 @bp.route("/")
 @login_required()
 def features():
-    return render_template('feature.html')
+    where = {
+        "user_id": g.user.id,
+    }
+    config_types = config_type_srv.get_all(where)
+    return render_template('feature.html', config_types=config_types)
 
 
 @bp.route("data", methods=['post'])
@@ -112,7 +116,7 @@ def upload():
 def get_datas(event_code, event_description, category, principal, remark, **kwargs):
     data_resource = []
 
-    datas = config_srv.get_all({"user_id": g.user.id})
+    datas = config_srv.get_all({"user_id": g.user.id,"config_type_id":kwargs.get("config_type_id")})
     for data in datas:
         row = [
             event_code,
