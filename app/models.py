@@ -18,7 +18,7 @@ class User(Base):
 
     phone = db.Column(db.String(255), unique=True, nullable=True, index=True)  # 手机号
     password_hash = db.Column(db.String(255), nullable=False)  # 密码
-    user_name=db.Column(db.String(255), unique=True, nullable=True, index=True)  # 用户名
+    user_name = db.Column(db.String(255), unique=True, nullable=True, index=True)  # 用户名
 
     @property
     def password(self):
@@ -37,4 +37,14 @@ class Config(Base):
     argument_description = db.Column(db.String(255), unique=False, nullable=False)
     type = db.Column(db.String(255), unique=False, nullable=False)
     pre_argument = db.Column(db.String(255), unique=False, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    config_type_id = db.Column(db.Integer, server_default="0", nullable=False, )
+
+    @property
+    def config_type(self):
+        return ConfigType.query.get(self.config_type_id)
+
+
+class ConfigType(Base):
+    name = db.Column(db.String(255), unique=False, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
