@@ -44,18 +44,20 @@ def data():
 @bp.route("config", methods=['get', 'post'])
 @login_required()
 def config():
+    config_type = request.args.get("config_type", 0)
     form = ConfigForm()
-
+    form.config_type_id.data = config_type
     if form.validate_on_submit():
-        data = config_srv.get_first({"argument_key": form.data.get('argument_key'), "user_id": g.user.id})
+        data = config_srv.get_first(
+            {"argument_key": form.data.get('argument_key'), "config_type_id": config_type, "user_id": g.user.id})
         if data is None:
             config_srv.save(user_id=g.user.id, **form.data)
 
             flash("保存成功")
-            return redirect(url_for(".config"))
+            return redirect(url_for(".config", config_type=config_type))
         flash("参数key已经存在")
 
-    datas = config_srv.get_all({"user_id": g.user.id})
+    datas = config_srv.get_all({"user_id": g.user.id, "config_type_id": config_type})
 
     return render_template('config.html', form=form, configs=datas)
 
@@ -89,7 +91,7 @@ def upload():
         file.save(file_path)
         frame = pandas.read_excel(file_path)
         data_resource = []
-        frame=frame.fillna("")
+        frame = frame.fillna("")
         for index, row in frame.iterrows():
             event_code = row.get("事件code")
             event_description = row.get("事件说明")
