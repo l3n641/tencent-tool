@@ -39,9 +39,11 @@
                         {% if request.endpoint=='home.features' %} class="active" {% endif %}>
                     <a href="{{ url_for('home.features') }}" target="_blank">功能页</a>
                 </li>
+
+
                 <li
-                        {% if request.endpoint=='home.config' %} class="active" {% endif %}>
-                    <a href="{{ url_for('home.config') }}" target="_blank">配置页</a>
+                        {% if request.endpoint=='config_type.index' %} class="active" {% endif %}>
+                    <a href="{{ url_for('config_type.index') }}" target="_blank">配置页</a>
                 </li>
             </ul>
 
@@ -82,6 +84,7 @@
 <script src="{{ url_for('static', filename='plugins/DataTables-1.10.15/extensions/Buttons/js/buttons.html5.js') }}"></script>
 <script src="{{ url_for('static', filename='uploadifive/jquery.uploadifive.min.js') }}"></script>
 
+<script src="{{ url_for('static', filename='js/jquery.confirm.min.js') }}"></script>
 
 {% endblock %}
 
