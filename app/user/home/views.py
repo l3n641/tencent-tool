@@ -103,7 +103,8 @@ def upload():
             principal = row.get("负责人")
             remark = row.get("备注")
             sub_datas = get_datas(event_code=event_code, event_description=event_description, category=category,
-                                  principal=principal, remark=remark)
+                                  principal=principal, remark=remark,
+                                  config_type_id=request.form.get('config_type_id', 0))
             data_resource.extend(sub_datas)
 
         os.remove(file_path)
@@ -116,7 +117,7 @@ def upload():
 def get_datas(event_code, event_description, category, principal, remark, **kwargs):
     data_resource = []
 
-    datas = config_srv.get_all({"user_id": g.user.id,"config_type_id":kwargs.get("config_type_id")})
+    datas = config_srv.get_all({"user_id": g.user.id, "config_type_id": kwargs.get("config_type_id")})
     for data in datas:
         row = [
             event_code,
