@@ -88,7 +88,7 @@
 
         </div>
         <div class="row col-md-offset-8">
-            <button type="reset" class="btn btn-warning">清空文本</button>
+            <button type="reset" id="clear" class="btn btn-warning">清空文本</button>
             <button type="button" class="btn btn-default" id="add_content">添加</button>
 
         </div>
@@ -145,6 +145,15 @@
             $("#config_type_id").addClass("sr-only");
         }
     });
+
+    $("#clear").click(
+        function () {
+            $("#argument_key").addClass("sr-only");
+            $("#argument_description").addClass("sr-only");
+            $("#type_div").addClass("sr-only");
+            $("#config_type_id").removeClass("sr-only");
+        }
+    )
 
 
     $(document).ready(function () {
